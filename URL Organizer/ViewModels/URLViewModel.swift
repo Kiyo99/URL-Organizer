@@ -42,16 +42,19 @@ class URLViewModel {
     func removeAllURLs() {
         urlList.removeAll()
         selectedURLItem = nil
+        isEditing = false
     }
     
     func removeUrlItem(_ item: URLItem){
         urlList.removeAll { $0.id == item.id }
         selectedURLItem = nil
+        isEditing = false
     }
     
     func removeDuplicates(of item: URLItem) {
         urlList.removeAll { $0.urlString == item.urlString && $0.id != item.id }
         selectedURLItem = nil
+        isEditing = false
     }
     
     func editURL(_ item: URLItem){
@@ -62,10 +65,8 @@ class URLViewModel {
     
     func saveEdits(){
         guard let selectedURLItem, !currentURL.isEmpty, validateURL() else {
-            print("SelectedURL is empty")
             return
         }
-        // find the index of the selectedItem in the urlList
         if let index = urlList.firstIndex(where: {$0.id == selectedURLItem.id}){
             urlList[index].urlString = currentURL
         }

@@ -136,6 +136,15 @@ final class URL_OrganizerTests: XCTestCase {
         XCTAssertNil(urlViewModel.selectedURLItem)
     }
     
+    func test_removeUrlItem_resetsIsEditing() {
+        urlViewModel.currentURL = "https://mozilla.org"
+        urlViewModel.addURL()
+        let item = urlViewModel.urlList[0]
+        urlViewModel.editURL(item)
+        urlViewModel.removeUrlItem(item)
+        XCTAssertFalse(urlViewModel.isEditing)
+    }
+    
     // MARK: - removeAllURLs
     func test_removeAllURLs_clearsEntireList() {
         urlViewModel.currentURL = "https://mozilla.org"
@@ -158,6 +167,15 @@ final class URL_OrganizerTests: XCTestCase {
         urlViewModel.editURL(item)
         urlViewModel.removeAllURLs()
         XCTAssertNil(urlViewModel.selectedURLItem)
+    }
+    
+    func test_removeAllURLs_resetsIsEditing() {
+        urlViewModel.currentURL = "https://mozilla.org"
+        urlViewModel.addURL()
+        let item = urlViewModel.urlList[0]
+        urlViewModel.editURL(item)
+        urlViewModel.removeAllURLs()
+        XCTAssertFalse(urlViewModel.isEditing)
     }
     
     // MARK: - editURL
@@ -255,6 +273,15 @@ final class URL_OrganizerTests: XCTestCase {
         urlViewModel.editURL(item)
         urlViewModel.removeDuplicates(of: item)
         XCTAssertNil(urlViewModel.selectedURLItem)
+    }
+    
+    func test_removeDuplicates_resetsIsEditing() {
+        urlViewModel.currentURL = "https://mozilla.org"
+        urlViewModel.addURL()
+        let item = urlViewModel.urlList[0]
+        urlViewModel.editURL(item)
+        urlViewModel.removeDuplicates(of: item)
+        XCTAssertFalse(urlViewModel.isEditing)
     }
 
 }
