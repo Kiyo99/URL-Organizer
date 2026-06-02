@@ -13,7 +13,12 @@ class URLViewModel {
     var urlList: [URLItem] = []
     var selectedURLItem: URLItem? = nil
     var currentURL: String = ""
+    var urlToShow: URL? = nil
     var validationErrorMessage: String = ""
+    var showErrorAlert: Bool = false
+    var showWebView: Bool = false
+    var showOptions: Bool = false
+    var isEditing: Bool = false
     
     // MARK: - Functions to be called from the View
     func validateURL() -> Bool {
@@ -22,6 +27,7 @@ class URLViewModel {
               safeUrl.scheme?.lowercased() == "https" || safeUrl.scheme?.lowercased() == "http",
               safeUrl.host != nil else {
             validationErrorMessage = "Please enter a valid URL."
+            showErrorAlert = true
             return false
         }
         return true
@@ -35,28 +41,46 @@ class URLViewModel {
     
     func removeAllURLs() {
         urlList.removeAll()
+        selectedURLItem = nil
     }
     
     func removeUrlItem(_ item: URLItem){
         urlList.removeAll { $0.id == item.id }
+        selectedURLItem = nil
     }
     
     func removeDuplicates(of item: URLItem) {
         urlList.removeAll { $0.urlString == item.urlString && $0.id != item.id }
+        selectedURLItem = nil
     }
     
     func editURL(_ item: URLItem){
         selectedURLItem = item
         currentURL = item.urlString
+        isEditing = true
     }
     
     func saveEdits(){
-        guard let selectedURLItem, !currentURL.isEmpty, validateURL() else { return }
+        guard let selectedURLItem, !currentURL.isEmpty, validateURL() else {
+            print("SelectedURL is empty")
+            return
+        }
         // find the index of the selectedItem in the urlList
         if let index = urlList.firstIndex(where: {$0.id == selectedURLItem.id}){
             urlList[index].urlString = currentURL
         }
         self.selectedURLItem = nil
         currentURL = ""
+        isEditing = false
+    }
+    
+    func showWebSheet(for item: URLItem){
+        urlToShow = URL(string: item.urlString)
+        showWebView = true
+    }
+    
+    func showOptionsDialog(for item: URLItem) {
+        selectedURLItem = item
+        showOptions = true
     }
 }
