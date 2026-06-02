@@ -16,8 +16,6 @@ class URLViewModel {
     var validationErrorMessage: String = ""
     
     // MARK: - Functions to be called from the View
-    // TODO: - edit, remove, removeAll, removeDuplicates, addURL, validateURL
-    
     func validateURL() -> Bool {
         validationErrorMessage = ""
         guard let safeUrl = URL(string: currentURL),
@@ -43,8 +41,8 @@ class URLViewModel {
         urlList.removeAll { $0.id == item.id }
     }
     
-    func removeDuplicates() {
-        
+    func removeDuplicates(of item: URLItem) {
+        urlList.removeAll { $0.urlString == item.urlString && $0.id != item.id }
     }
     
     func editURL(_ item: URLItem){

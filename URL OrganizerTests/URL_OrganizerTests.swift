@@ -189,5 +189,45 @@ final class URL_OrganizerTests: XCTestCase {
         urlViewModel.saveEdits()
         XCTAssertTrue(urlViewModel.currentURL.isEmpty)
     }
+    
+    // MARK: - removeDuplicates
+    func test_removeDuplicates_withNoDuplicates_listUnchanged() {
+        urlViewModel.currentURL = "https://mozilla.org"
+        urlViewModel.addURL()
+        urlViewModel.currentURL = "https://apple.com"
+        urlViewModel.addURL()
+        let item = urlViewModel.urlList[0]
+        urlViewModel.removeDuplicates(of: item)
+        XCTAssertEqual(urlViewModel.urlList.count, 2)
+    }
+    
+    func test_removeDuplicates_removesDuplicateURLs() {
+        urlViewModel.currentURL = "https://mozilla.org"
+        urlViewModel.addURL()
+        urlViewModel.currentURL = "https://mozilla.org"
+        urlViewModel.addURL()
+        let item = urlViewModel.urlList[0]
+        urlViewModel.removeDuplicates(of: item)
+        XCTAssertEqual(urlViewModel.urlList.count, 1)
+    }
+    
+    func test_removeDuplicates_keepsFirstOccurrence() {
+        urlViewModel.currentURL = "https://mozilla.org"
+        urlViewModel.addURL()
+        urlViewModel.currentURL = "https://apple.com"
+        urlViewModel.addURL()
+        urlViewModel.currentURL = "https://mozilla.org"
+        urlViewModel.addURL()
+        let item = urlViewModel.urlList[0]
+        urlViewModel.removeDuplicates(of: item)
+        XCTAssertEqual(urlViewModel.urlList[0].urlString, "https://mozilla.org")
+        XCTAssertEqual(urlViewModel.urlList[1].urlString, "https://apple.com")
+    }
+    
+    func test_removeDuplicates_onEmptyList_doesNotCrash() {
+        let dummyItem = URLItem(urlString: "https://mozilla.org")
+        urlViewModel.removeDuplicates(of: dummyItem)
+        XCTAssertTrue(urlViewModel.urlList.isEmpty)
+    }
 
 }
