@@ -3,6 +3,7 @@
 xcuserdata/
 DerivedData/
 *.xccheckout
+xcshareddata/
 
 # macOS
 .DS_Store
