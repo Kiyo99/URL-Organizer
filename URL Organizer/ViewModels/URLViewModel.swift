@@ -23,10 +23,15 @@ class URLViewModel {
     // MARK: - Functions to be called from the View
     func validateURL() -> Bool {
         validationErrorMessage = ""
+        guard !currentURL.isEmpty else {
+            validationErrorMessage = "Please enter a URL."
+            showErrorAlert = true
+            return false
+        }
         guard let safeUrl = URL(string: currentURL),
               safeUrl.scheme?.lowercased() == "https" || safeUrl.scheme?.lowercased() == "http",
               safeUrl.host != nil else {
-            validationErrorMessage = "Please enter a valid URL."
+            validationErrorMessage = "Please enter a valid URL (e.g. https://mozilla.org)."
             showErrorAlert = true
             return false
         }
@@ -34,7 +39,7 @@ class URLViewModel {
     }
     
     func addURL() {
-        guard !currentURL.isEmpty, validateURL() else { return }
+        guard validateURL() else { return }
         urlList.append(URLItem(urlString: currentURL))
         currentURL = ""
     }

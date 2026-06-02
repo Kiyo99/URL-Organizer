@@ -87,10 +87,11 @@ final class URL_OrganizerTests: XCTestCase {
         XCTAssertTrue(urlViewModel.currentURL.isEmpty)
     }
     
-    func test_addURL_withEmptyURL_doesNotAppendToList() {
+    func test_addURL_withEmptyURL_doesNotAppendToList_andSetsError() {
         urlViewModel.currentURL = ""
         urlViewModel.addURL()
         XCTAssertTrue(urlViewModel.urlList.isEmpty)
+        XCTAssertFalse(urlViewModel.validationErrorMessage.isEmpty)
     }
     
     func test_addURL_withInvalidURL_doesNotAppendToList() {
