@@ -1,0 +1,8 @@
+# Xcode
+*.xcuserstate
+xcuserdata/
+DerivedData/
+*.xccheckout
+
+# macOS
+.DS_Store
